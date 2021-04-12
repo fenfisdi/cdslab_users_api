@@ -1,0 +1,32 @@
+version: "3.5"
+services:
+  user_app:
+    build: .
+    container_name: cdslab_user_app
+    env_file: .env
+    image: cdslab_user
+    networks:
+      - cdslab_user
+    ports:
+      - 5000:5000
+    volumes:
+    - ./src:/app/src
+
+  user_mongo:
+    container_name: cdslab_user_mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: cdsuser
+      MONGO_INITDB_ROOT_PASSWORD: cdspass
+    image: mongo:3-xenial
+    networks:
+      - cdslab_user
+    ports:
+      - 27017:27017
+    volumes:
+      - /tmp/data:/data/db
+
+
+networks:
+  cdslab_user:
+    name: cdslab_user
+    driver: bridge
