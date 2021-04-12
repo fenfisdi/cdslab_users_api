@@ -15,15 +15,26 @@ class SecurityQuestion(BaseModel):
 
 
 class UpdateUser(BaseModel):
-    name: str = Field(None, max_length=64, regex=ALPHANUMERIC)
-    last_name: str = Field(None, max_length=64, regex=ALPHANUMERIC)
+    name: str = Field(None)
+    last_name: str = Field(None)
     phone: int = Field(None)
-    phone_prefix: str = Field(None, regex=PHONE_PREFIX)
-    institution: str = Field(None, max_length=64, regex=ALPHANUMERIC)
-    institution_role: str = Field(None, min_length=3, regex=ALPHANUMERIC)
-    profession: str = Field(None, min_length=3, regex=ALPHANUMERIC)
-    gender: str = Field(None, max_length=1)
+    phone_prefix: str = Field(None)
+    institution: str = Field(None)
+    institution_role: str = Field(None)
+    profession: str = Field(None)
+    gender: str = Field(None)
     birthday: datetime = Field(None)
+
+    class Config:
+        fields = {
+            'name': {'max_length': 64, 'regex': ALPHANUMERIC},
+            'last_name': {'max_length': 64, 'regex': ALPHANUMERIC},
+            'phone_prefix': {'regex': PHONE_PREFIX},
+            'institution': {'max_length': 64, 'regex': ALPHANUMERIC},
+            'institution_role': {'min_length': 64, 'regex': ALPHANUMERIC},
+            'profession': {'min_length': 64, 'regex': ALPHANUMERIC},
+            'gender': {'max_length': 1}
+        }
 
     @validator('gender')
     def validate_gender(cls, value: str):
@@ -40,12 +51,12 @@ class UpdateUser(BaseModel):
 
 
 class NewUser(UpdateUser):
-    name: str = Field(..., max_length=64, regex=ALPHANUMERIC)
-    last_name: str = Field(..., max_length=64, regex=ALPHANUMERIC)
+    name: str = Field(...)
+    last_name: str = Field(...)
     phone: int = Field(...)
-    phone_prefix: str = Field(..., regex=PHONE_PREFIX)
-    institution: str = Field(..., max_length=64, regex=ALPHANUMERIC)
-    institution_role: str = Field(..., min_length=3, regex=ALPHANUMERIC)
+    phone_prefix: str = Field(...)
+    institution: str = Field(...)
+    institution_role: str = Field(...)
     birthday: datetime = Field(...)
     email: EmailStr = Field(...)
     password: str = Field(...)
