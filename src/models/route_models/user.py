@@ -14,10 +14,9 @@ class SecurityQuestion(BaseModel):
     answer: str = Field(...)
 
 
-class UserRoute(BaseModel):
+class UpdateUser(BaseModel):
     name: str = Field(..., max_length=64, regex=ALPHANUMERIC)
     last_name: str = Field(..., max_length=64, regex=ALPHANUMERIC)
-    email: EmailStr = Field(...)
     phone: int = Field(...)
     phone_prefix: str = Field(..., regex=PHONE_PREFIX)
     institution: str = Field(..., max_length=64, regex=ALPHANUMERIC)
@@ -25,8 +24,6 @@ class UserRoute(BaseModel):
     profession: str = Field(None, min_length=3, regex=ALPHANUMERIC)
     gender: str = Field(None, max_length=1)
     birthday: datetime = Field(...)
-    password: str = Field(...)
-    security_questions: List[SecurityQuestion] = Field(None)
 
     @validator('gender')
     def validate_gender(cls, value: str):
@@ -40,3 +37,9 @@ class UserRoute(BaseModel):
         if re.search(FORMAT_DATE, value):
             return value + 'T00:00'
         return value
+
+
+class NewUser(UpdateUser):
+    email: EmailStr = Field(...)
+    password: str = Field(...)
+    security_questions: List[SecurityQuestion] = Field(None)
