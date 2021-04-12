@@ -34,6 +34,17 @@ def create_user(user: NewUser):
 
 
 @user_routes.get('/user/{email}')
+def validate_user(email: str):
+    user_found = UserInterface.find_one_invalid(email=email)
+    if user_found:
+        return UJSONResponse(UserMessage.exist, HTTP_400_BAD_REQUEST)
+    user_found.is_active = True
+    user_found.save()
+
+    return UJSONResponse(UserMessage.validated, HTTP_200_OK)
+
+
+@user_routes.get('/user/{email}')
 def find_user(email: str):
     user = UserInterface.find_one(email)
     if not user:
