@@ -15,15 +15,15 @@ class SecurityQuestion(BaseModel):
 
 
 class UpdateUser(BaseModel):
-    name: str = Field(..., max_length=64, regex=ALPHANUMERIC)
-    last_name: str = Field(..., max_length=64, regex=ALPHANUMERIC)
-    phone: int = Field(...)
-    phone_prefix: str = Field(..., regex=PHONE_PREFIX)
-    institution: str = Field(..., max_length=64, regex=ALPHANUMERIC)
-    institution_role: str = Field(..., min_length=3, regex=ALPHANUMERIC)
+    name: str = Field(None, max_length=64, regex=ALPHANUMERIC)
+    last_name: str = Field(None, max_length=64, regex=ALPHANUMERIC)
+    phone: int = Field(None)
+    phone_prefix: str = Field(None, regex=PHONE_PREFIX)
+    institution: str = Field(None, max_length=64, regex=ALPHANUMERIC)
+    institution_role: str = Field(None, min_length=3, regex=ALPHANUMERIC)
     profession: str = Field(None, min_length=3, regex=ALPHANUMERIC)
     gender: str = Field(None, max_length=1)
-    birthday: datetime = Field(...)
+    birthday: datetime = Field(None)
 
     @validator('gender')
     def validate_gender(cls, value: str):
@@ -40,6 +40,13 @@ class UpdateUser(BaseModel):
 
 
 class NewUser(UpdateUser):
+    name: str = Field(..., max_length=64, regex=ALPHANUMERIC)
+    last_name: str = Field(..., max_length=64, regex=ALPHANUMERIC)
+    phone: int = Field(...)
+    phone_prefix: str = Field(..., regex=PHONE_PREFIX)
+    institution: str = Field(..., max_length=64, regex=ALPHANUMERIC)
+    institution_role: str = Field(..., min_length=3, regex=ALPHANUMERIC)
+    birthday: datetime = Field(...)
     email: EmailStr = Field(...)
     password: str = Field(...)
     security_questions: List[SecurityQuestion] = Field(None)

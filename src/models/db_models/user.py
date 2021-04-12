@@ -22,7 +22,12 @@ class User(BaseDocument):
     gender = StringField()
     birthday = DateField()
     security_questions = ListField()
+    is_deleted = BooleanField(default=False)
     is_active = BooleanField(default=False)
+
+
+class SecurityQuestions(BaseDocument):
+    pass
 
 
 class Credentials(BaseDocument):

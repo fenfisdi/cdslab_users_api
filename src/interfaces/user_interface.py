@@ -7,4 +7,8 @@ class UserInterface:
 
     @staticmethod
     def find_one(email: str) -> Union[None, User]:
-        return User.objects(email=email).first()
+        filters = dict(
+            email=email,
+            is_deleted=False,
+        )
+        return User.objects(**filters).first()

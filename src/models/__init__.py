@@ -1,4 +1,4 @@
 from .db_models.user import User, Credentials
-from .route_models.user import NewUser
+from .route_models.user import NewUser, UpdateUser
 
-__all__ = ['NewUser', 'User', 'Credentials']
+__all__ = ['NewUser', 'UpdateUser', 'User', 'Credentials']

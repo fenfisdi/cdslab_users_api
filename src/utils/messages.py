@@ -7,3 +7,5 @@ class UserMessage:
     exist: str = 'User exist'
     found: str = 'User Found'
     not_found: str = 'User not found'
+    updated: str = 'User updated'
+    deleted: str = 'User deleted'

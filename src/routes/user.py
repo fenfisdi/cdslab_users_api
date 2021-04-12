@@ -7,7 +7,7 @@ from starlette.status import (
 )
 
 from src.interfaces import UserInterface
-from src.models import User, Credentials, NewUser
+from src.models import User, Credentials, NewUser, UpdateUser
 from src.utils.messages import UserMessage
 from src.utils.response import UJSONResponse
 
@@ -40,3 +40,26 @@ def find_user(email: str):
         return UJSONResponse(UserMessage.not_found, HTTP_404_NOT_FOUND)
     # TODO: Return User Information
     return UJSONResponse(UserMessage.found, HTTP_200_OK)
+
+
+@user_routes.put('/user/{email}')
+def update_user(email: str, user: UpdateUser):
+    user_found = UserInterface.find_one(email)
+    if not user_found:
+        return UJSONResponse(UserMessage.not_found, HTTP_404_NOT_FOUND)
+
+    user_found.update(**user.dict(exclude_none=True))
+    user_found.save().reload()
+    # TODO: Return User Information
+    return UJSONResponse(UserMessage.updated, HTTP_200_OK)
+
+
+@user_routes.delete('/user/{email}')
+def delete_user(email: str):
+    user_found = UserInterface.find_one(email)
+    if not user_found:
+        return UJSONResponse(UserMessage.not_found, HTTP_404_NOT_FOUND)
+
+    user_found.is_deleted = True
+    user_found.save()
+    return UJSONResponse(UserMessage.deleted, HTTP_200_OK)
