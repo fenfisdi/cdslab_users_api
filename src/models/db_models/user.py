@@ -1,25 +1,19 @@
-from mongoengine import Document, DateTimeField, StringField, IntField, \
-    DateField, ListField
+from mongoengine import (
+    StringField,
+    IntField,
+    DateField,
+    ListField,
+    ReferenceField,
+    BooleanField
+)
 
-from src.utils import DateTime
-
-
-class BaseDocument(Document):
-    inserted_at = DateTimeField()
-    updated_at = DateTimeField()
-
-    meta = {'abstract': True, 'strict': False, 'allow_inheritance': True}
-
-    def clean(self):
-        if not self.inserted_at:
-            self.inserted_at = DateTime.current_datetime()
-        self.updated_at = DateTime.current_datetime()
+from .base import BaseDocument
 
 
 class User(BaseDocument):
     name = StringField()
     last_name = StringField()
-    email = StringField()
+    email = StringField(unique=True)
     phone = IntField()
     phone_prefix = StringField()
     institution = StringField()
@@ -28,3 +22,9 @@ class User(BaseDocument):
     gender = StringField()
     birthday = DateField()
     security_questions = ListField()
+    is_active = BooleanField(default=False)
+
+
+class Credentials(BaseDocument):
+    user = ReferenceField(User)
+    password = StringField()

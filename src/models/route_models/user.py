@@ -25,6 +25,7 @@ class UserRoute(BaseModel):
     profession: str = Field(None, min_length=3, regex=ALPHANUMERIC)
     gender: str = Field(None, max_length=1)
     birthday: datetime = Field(...)
+    password: str = Field(...)
     security_questions: List[SecurityQuestion] = Field(None)
 
     @validator('gender')

@@ -4,11 +4,10 @@ from starlette.status import (
     HTTP_201_CREATED,
     HTTP_400_BAD_REQUEST,
     HTTP_404_NOT_FOUND
-
 )
 
 from src.interfaces import UserInterface
-from src.models import User, UserRoute
+from src.models import User, Credentials, UserRoute
 from src.utils.messages import UserMessage
 from src.utils.response import UJSONResponse
 
@@ -20,8 +19,14 @@ def create_user(user: UserRoute):
     user_found = UserInterface.find_one(email=user.email)
     if user_found:
         return UJSONResponse(UserMessage.exist, HTTP_400_BAD_REQUEST)
-    user = User(**user.dict())
-    user.save()
+    user_dict = user.dict(exclude={'password'})
+    new_user = User(**user_dict)
+    credential = Credentials(user=new_user, password=user.password)
+    try:
+        new_user.save()
+        credential.save()
+    except Exception as error:
+        return UJSONResponse(str(error), HTTP_400_BAD_REQUEST)
     # TODO: Return User Information
     return UJSONResponse(UserMessage.created, HTTP_201_CREATED)
 
