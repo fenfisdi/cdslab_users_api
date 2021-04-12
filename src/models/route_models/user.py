@@ -31,8 +31,8 @@ class UpdateUser(BaseModel):
             'last_name': {'max_length': 64, 'regex': ALPHANUMERIC},
             'phone_prefix': {'regex': PHONE_PREFIX},
             'institution': {'max_length': 64, 'regex': ALPHANUMERIC},
-            'institution_role': {'min_length': 64, 'regex': ALPHANUMERIC},
-            'profession': {'min_length': 64, 'regex': ALPHANUMERIC},
+            'institution_role': {'max_length': 64, 'regex': ALPHANUMERIC},
+            'profession': {'max_length': 64, 'regex': ALPHANUMERIC},
             'gender': {'max_length': 1}
         }
 

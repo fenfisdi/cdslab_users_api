@@ -33,11 +33,11 @@ def create_user(user: NewUser):
     return UJSONResponse(UserMessage.created, HTTP_201_CREATED)
 
 
-@user_routes.get('/user/{email}')
+@user_routes.get('/user/{email}/validate')
 def validate_user(email: str):
-    user_found = UserInterface.find_one_invalid(email=email)
-    if user_found:
-        return UJSONResponse(UserMessage.exist, HTTP_400_BAD_REQUEST)
+    user_found = UserInterface.find_one_inactive(email=email)
+    if not user_found:
+        return UJSONResponse(UserMessage.not_found, HTTP_400_BAD_REQUEST)
     user_found.is_active = True
     user_found.save()
 
@@ -46,7 +46,7 @@ def validate_user(email: str):
 
 @user_routes.get('/user/{email}')
 def find_user(email: str):
-    user = UserInterface.find_one(email)
+    user = UserInterface.find_one_active(email)
     if not user:
         return UJSONResponse(UserMessage.not_found, HTTP_404_NOT_FOUND)
     # TODO: Return User Information
@@ -55,7 +55,7 @@ def find_user(email: str):
 
 @user_routes.put('/user/{email}')
 def update_user(email: str, user: UpdateUser):
-    user_found = UserInterface.find_one(email)
+    user_found = UserInterface.find_one_active(email)
     if not user_found:
         return UJSONResponse(UserMessage.not_found, HTTP_404_NOT_FOUND)
 
@@ -67,7 +67,7 @@ def update_user(email: str, user: UpdateUser):
 
 @user_routes.delete('/user/{email}')
 def delete_user(email: str):
-    user_found = UserInterface.find_one(email)
+    user_found = UserInterface.find_one_active(email)
     if not user_found:
         return UJSONResponse(UserMessage.not_found, HTTP_404_NOT_FOUND)
 

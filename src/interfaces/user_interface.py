@@ -9,16 +9,23 @@ class UserInterface:
     def find_one(email: str) -> Union[None, User]:
         filters = dict(
             email=email,
-            is_valid=True,
+        )
+        return User.objects(**filters).first()
+
+    @staticmethod
+    def find_one_active(email: str) -> Union[None, User]:
+        filters = dict(
+            email=email,
+            is_active=True,
             is_deleted=False,
         )
         return User.objects(**filters).first()
 
     @staticmethod
-    def find_one_invalid(email: str) -> Union[None, User]:
+    def find_one_inactive(email: str) -> Union[None, User]:
         filters = dict(
             email=email,
-            is_valid=False,
+            is_active=False,
             is_deleted=False,
         )
         return User.objects(**filters).first()

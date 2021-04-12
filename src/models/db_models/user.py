@@ -31,5 +31,5 @@ class SecurityQuestions(BaseDocument):
 
 
 class Credentials(BaseDocument):
-    user = ReferenceField(User)
+    user = ReferenceField(User, unique=True)
     password = StringField()
