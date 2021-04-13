@@ -8,6 +8,7 @@ from starlette.status import (
 
 from src.interfaces import UserInterface
 from src.models import User, Credentials, NewUser, UpdateUser
+from src.utils.encoder import BsonObject
 from src.utils.messages import UserMessage
 from src.utils.response import UJSONResponse
 
@@ -30,7 +31,11 @@ def create_user(user: NewUser):
     except Exception as error:
         return UJSONResponse(str(error), HTTP_400_BAD_REQUEST)
     # TODO: Return User Information
-    return UJSONResponse(UserMessage.created, HTTP_201_CREATED)
+    return UJSONResponse(
+        UserMessage.created,
+        HTTP_201_CREATED,
+        BsonObject.dict(new_user)
+    )
 
 
 @user_routes.get('/user/{email}/validate')
@@ -49,8 +54,8 @@ def find_user(email: str):
     user = UserInterface.find_one_active(email)
     if not user:
         return UJSONResponse(UserMessage.not_found, HTTP_404_NOT_FOUND)
-    # TODO: Return User Information
-    return UJSONResponse(UserMessage.found, HTTP_200_OK)
+
+    return UJSONResponse(UserMessage.found, HTTP_200_OK, BsonObject.dict(user))
 
 
 @user_routes.put('/user/{email}')
@@ -61,8 +66,12 @@ def update_user(email: str, user: UpdateUser):
 
     user_found.update(**user.dict(exclude_none=True))
     user_found.save().reload()
-    # TODO: Return User Information
-    return UJSONResponse(UserMessage.updated, HTTP_200_OK)
+
+    return UJSONResponse(
+        UserMessage.updated,
+        HTTP_200_OK,
+        BsonObject.dict(user_found)
+    )
 
 
 @user_routes.delete('/user/{email}')
