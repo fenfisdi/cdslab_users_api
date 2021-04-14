@@ -7,7 +7,7 @@ from starlette.status import (
 )
 
 from src.interfaces import UserInterface, CredentialInterface
-from src.models import User, Credentials, NewUser, UpdateUser
+from src.models import User, Credentials, NewUser, UpdateUser, SecurityQuestions
 from src.utils.encoder import BsonObject
 from src.utils.messages import UserMessage
 from src.utils.response import UJSONResponse
@@ -21,17 +21,24 @@ def create_user(user: NewUser):
     if user_found:
         return UJSONResponse(UserMessage.exist, HTTP_404_NOT_FOUND)
 
-    user_dict = user.dict(exclude={'password', 'otp_code'})
+    user_dict = user.dict(
+        exclude={'password', 'otp_code', 'security_questions'}
+    )
     new_user = User(**user_dict)
     credential = Credentials(
         user=new_user,
         password=user.password,
         otp_code=user.otp_code
     )
+    security_questions = SecurityQuestions(
+        user=new_user,
+        questions=[question.dict() for question in user.security_questions]
+    )
 
     try:
         new_user.save()
         credential.save()
+        security_questions.save()
     except Exception as error:
         return UJSONResponse(str(error), HTTP_400_BAD_REQUEST)
     return UJSONResponse(
@@ -93,7 +100,7 @@ def delete_user(email: str):
 
 @user_routes.get('/user/{email}/otp')
 def get_otp_code(email: str):
-    user_found = UserInterface.find_one_inactive(email)
+    user_found = UserInterface.find_one(email)
     if not user_found:
         return UJSONResponse(UserMessage.not_found, HTTP_404_NOT_FOUND)
 

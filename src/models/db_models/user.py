@@ -2,9 +2,10 @@ from mongoengine import (
     StringField,
     IntField,
     DateField,
-    ListField,
     ReferenceField,
-    BooleanField
+    BooleanField,
+    EmbeddedDocument,
+    EmbeddedDocumentListField
 )
 
 from .base import BaseDocument
@@ -21,13 +22,18 @@ class User(BaseDocument):
     profession = StringField()
     gender = StringField()
     birthday = DateField()
-    security_questions = ListField()
     is_deleted = BooleanField(default=False)
     is_active = BooleanField(default=False)
 
 
+class Question(EmbeddedDocument):
+    question = StringField()
+    answer = StringField()
+
+
 class SecurityQuestions(BaseDocument):
-    pass
+    user = ReferenceField(User, unique=True)
+    questions = EmbeddedDocumentListField(Question)
 
 
 class Credentials(BaseDocument):

@@ -1,3 +1,5 @@
+from typing import List
+
 from fastapi import APIRouter
 from starlette.status import (
     HTTP_200_OK,
@@ -5,9 +7,12 @@ from starlette.status import (
     HTTP_404_NOT_FOUND
 )
 
-from src.interfaces import UserInterface, CredentialInterface
+from src.interfaces import UserInterface, CredentialInterface, QuestionInterface
 from src.models import UserCredentials
-from src.utils.messages import UserMessage, CredentialMessage
+from src.models.db_models.user import Question
+from src.models.route_models.user import SecurityQuestion
+from src.utils.encoder import BsonObject
+from src.utils.messages import UserMessage, CredentialMessage, QuestionMessage
 from src.utils.response import UJSONResponse
 
 credential_routes = APIRouter()
@@ -25,4 +30,45 @@ def validate_credentials(user: UserCredentials):
 
     if credentials.password != user.password:
         return UJSONResponse(CredentialMessage.invalid, HTTP_400_BAD_REQUEST)
-    return UJSONResponse(CredentialMessage.logged, HTTP_200_OK)
+    data = {'otp_code': credentials.otp_code}
+    return UJSONResponse(CredentialMessage.logged, HTTP_200_OK, data)
+
+
+@credential_routes.get('/user/{email}/questions')
+def find_security_questions(email: str):
+    user_found = UserInterface.find_one_active(email)
+    if not user_found:
+        return UJSONResponse(UserMessage.exist, HTTP_404_NOT_FOUND)
+
+    security_question = QuestionInterface.find_one(user_found)
+    if not security_question:
+        return UJSONResponse(QuestionMessage.not_found, HTTP_400_BAD_REQUEST)
+    data = [BsonObject.dict(q) for q in security_question.questions]
+    return UJSONResponse(
+        QuestionMessage.found,
+        HTTP_200_OK,
+        data
+    )
+
+
+@credential_routes.post('/user/{email}/questions')
+def set_security_questions(email: str, questions: List[SecurityQuestion]):
+    user_found = UserInterface.find_one_active(email)
+    if not user_found:
+        return UJSONResponse(UserMessage.exist, HTTP_404_NOT_FOUND)
+
+    security_question = QuestionInterface.find_one(user_found)
+    if not security_question:
+        return UJSONResponse(QuestionMessage.not_found, HTTP_400_BAD_REQUEST)
+
+    security_question.questions = [
+        Question(**question.dict()) for question in questions
+    ]
+    try:
+        security_question.save()
+    except Exception as error:
+        return UJSONResponse(str(error), HTTP_400_BAD_REQUEST)
+    return UJSONResponse(
+        QuestionMessage.updated,
+        HTTP_200_OK
+    )

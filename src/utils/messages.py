@@ -16,3 +16,10 @@ class UserMessage:
 class CredentialMessage:
     invalid: str = 'Invalid User or Password'
     logged: str = 'User Logged'
+
+
+@dataclass
+class QuestionMessage:
+    found: str = 'Questions found'
+    not_found: str = 'Questions not found'
+    updated: str = 'Questions updated'
