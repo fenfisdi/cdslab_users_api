@@ -16,6 +16,9 @@ class UserMessage:
 class CredentialMessage:
     invalid: str = 'Invalid User or Password'
     logged: str = 'User Logged'
+    pass_updated: str = 'Password updated'
+    code_updated: str = 'Security code updated'
+    code_found: str = 'Security Code Found'
 
 
 @dataclass

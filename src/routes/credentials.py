@@ -22,7 +22,7 @@ credential_routes = APIRouter()
 def validate_credentials(user: UserCredentials):
     user_found = UserInterface.find_one(user.email)
     if not user_found:
-        return UJSONResponse(UserMessage.exist, HTTP_404_NOT_FOUND)
+        return UJSONResponse(UserMessage.not_found, HTTP_404_NOT_FOUND)
 
     credentials = CredentialInterface.find_one(user_found)
     if not credentials:
@@ -38,7 +38,7 @@ def validate_credentials(user: UserCredentials):
 def find_security_questions(email: str):
     user_found = UserInterface.find_one_active(email)
     if not user_found:
-        return UJSONResponse(UserMessage.exist, HTTP_404_NOT_FOUND)
+        return UJSONResponse(UserMessage.not_found, HTTP_404_NOT_FOUND)
 
     security_question = QuestionInterface.find_one(user_found)
     if not security_question:
@@ -55,7 +55,7 @@ def find_security_questions(email: str):
 def set_security_questions(email: str, questions: List[SecurityQuestion]):
     user_found = UserInterface.find_one_active(email)
     if not user_found:
-        return UJSONResponse(UserMessage.exist, HTTP_404_NOT_FOUND)
+        return UJSONResponse(UserMessage.not_found, HTTP_404_NOT_FOUND)
 
     security_question = QuestionInterface.find_one(user_found)
     if not security_question:
@@ -72,3 +72,55 @@ def set_security_questions(email: str, questions: List[SecurityQuestion]):
         QuestionMessage.updated,
         HTTP_200_OK
     )
+
+
+@credential_routes.post('/user/password')
+def update_password(user: UserCredentials):
+    user_found = UserInterface.find_one_active(user.email)
+    if not user_found:
+        return UJSONResponse(UserMessage.not_found, HTTP_404_NOT_FOUND)
+
+    credentials = CredentialInterface.find_one(user_found)
+    if not credentials:
+        return UJSONResponse(CredentialMessage.invalid, HTTP_400_BAD_REQUEST)
+
+    credentials.password = user.password
+    try:
+        credentials.save()
+    except Exception as error:
+        return UJSONResponse(str(error), HTTP_400_BAD_REQUEST)
+    return UJSONResponse(CredentialMessage.pass_updated, HTTP_200_OK)
+
+
+@credential_routes.post('/user/{email}/security_code')
+def set_security_code(email: str, code: str):
+    user_found = UserInterface.find_one_active(email)
+    if not user_found:
+        return UJSONResponse(UserMessage.not_found, HTTP_404_NOT_FOUND)
+
+    credentials = CredentialInterface.find_one(user_found)
+    if not credentials:
+        return UJSONResponse(CredentialMessage.invalid, HTTP_400_BAD_REQUEST)
+
+    credentials.security_code = code.strip()
+    try:
+        credentials.save()
+    except Exception as error:
+        return UJSONResponse(str(error), HTTP_400_BAD_REQUEST)
+    return UJSONResponse(CredentialMessage.code_updated, HTTP_200_OK)
+
+
+@credential_routes.get('/user/{email}/security_code')
+def get_security_code(email: str):
+    user_found = UserInterface.find_one_active(email)
+    if not user_found:
+        return UJSONResponse(UserMessage.not_found, HTTP_404_NOT_FOUND)
+
+    credentials = CredentialInterface.find_one(user_found)
+    if not credentials:
+        return UJSONResponse(CredentialMessage.invalid, HTTP_400_BAD_REQUEST)
+
+    data = {
+        'security_code': credentials.security_code,
+    }
+    return UJSONResponse(CredentialMessage.code_found, HTTP_200_OK, data)

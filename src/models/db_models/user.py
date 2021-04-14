@@ -39,4 +39,5 @@ class SecurityQuestions(BaseDocument):
 class Credentials(BaseDocument):
     user = ReferenceField(User, unique=True)
     password = StringField()
+    security_code = StringField()
     otp_code = StringField()
