@@ -60,4 +60,5 @@ class NewUser(UpdateUser):
     birthday: datetime = Field(...)
     email: EmailStr = Field(...)
     password: str = Field(...)
+    otp_code: str = Field(...)
     security_questions: List[SecurityQuestion] = Field(None)
