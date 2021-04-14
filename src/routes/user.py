@@ -19,7 +19,7 @@ user_routes = APIRouter()
 def create_user(user: NewUser):
     user_found = UserInterface.find_one(email=user.email)
     if user_found:
-        return UJSONResponse(UserMessage.exist, HTTP_400_BAD_REQUEST)
+        return UJSONResponse(UserMessage.exist, HTTP_404_NOT_FOUND)
 
     user_dict = user.dict(exclude={'password', 'otp_code'})
     new_user = User(**user_dict)
@@ -53,8 +53,11 @@ def validate_user(email: str):
 
 
 @user_routes.get('/user/{email}')
-def find_user(email: str):
-    user = UserInterface.find_one_active(email)
+def find_user(email: str, invalid: bool = False):
+    if invalid:
+        user = UserInterface.find_one_inactive(email)
+    else:
+        user = UserInterface.find_one_active(email)
     if not user:
         return UJSONResponse(UserMessage.not_found, HTTP_404_NOT_FOUND)
 
@@ -90,7 +93,7 @@ def delete_user(email: str):
 
 @user_routes.get('/user/{email}/otp')
 def get_otp_code(email: str):
-    user_found = UserInterface.find_one_active(email)
+    user_found = UserInterface.find_one_inactive(email)
     if not user_found:
         return UJSONResponse(UserMessage.not_found, HTTP_404_NOT_FOUND)
 

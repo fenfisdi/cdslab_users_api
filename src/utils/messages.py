@@ -10,3 +10,9 @@ class UserMessage:
     validated: str = 'User has been validated'
     updated: str = 'User updated'
     deleted: str = 'User deleted'
+
+
+@dataclass
+class CredentialMessage:
+    invalid: str = 'Invalid User or Password'
+    logged: str = 'User Logged'
