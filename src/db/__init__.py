@@ -1,3 +1,3 @@
-from .mongo import create_connection
+from .mongo import MongoEngine
 
-__all__ = ['create_connection']
+__all__ = ['MongoEngine']
