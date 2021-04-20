@@ -1,11 +1,13 @@
 attrs==20.3.0
+certifi==2020.12.5
+chardet==4.0.0
 click==7.1.2
 coverage==5.5
 dnspython==2.1.0
 email-validator==1.1.2
 fastapi==0.63.0
 h11==0.12.0
-idna==3.1
+idna==2.10
 iniconfig==1.1.1
 mongoengine==0.23.0
 mongomock==3.22.1
@@ -18,10 +20,12 @@ pyparsing==2.4.7
 pytest==6.2.3
 pytest-cov==2.11.1
 python-dotenv==0.17.0
+requests==2.25.1
 sentinels==1.0.0
 six==1.15.0
 starlette==0.13.6
 toml==0.10.2
 typing-extensions==3.7.4.3
 ujson==4.0.2
+urllib3==1.26.4
 uvicorn==0.13.4
