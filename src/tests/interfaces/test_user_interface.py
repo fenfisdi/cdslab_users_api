@@ -10,14 +10,18 @@ class UserInterfaceTestCase(TestCase):
 
     def setUp(self):
         connect('mongoenginetest', host='mongomock://localhost')
+
+        self.inactive_user = 'test@test.com'
         User(
             name='testName',
             last_name='testLastName',
-            email='test@test.com'
+            email=self.inactive_user
         ).save()
+
+        self.active_user = 'test2@test.com'
         User(
             name='testName',
-            email='test2@test.com',
+            email=self.active_user,
             is_active=True
         ).save()
 
@@ -25,11 +29,11 @@ class UserInterfaceTestCase(TestCase):
         disconnect()
 
     def test_find_one_successful(self):
-        user = UserInterface.find_one('test@test.com')
+        user = UserInterface.find_one(self.inactive_user)
 
         self.assertIsNotNone(user)
         self.assertIsInstance(user, User)
-        self.assertEqual(user.email, 'test@test.com')
+        self.assertEqual(user.email, self.inactive_user)
 
     def test_find_one_not_found(self):
         user = UserInterface.find_one('test1@test.com')
@@ -37,25 +41,25 @@ class UserInterfaceTestCase(TestCase):
         self.assertIsNone(user)
 
     def test_find_one_active_successful(self):
-        user = UserInterface.find_one_active('test2@test.com')
+        user = UserInterface.find_one_active(self.active_user)
 
         self.assertIsNotNone(user)
         self.assertIsInstance(user, User)
-        self.assertEqual(user.email, 'test2@test.com')
+        self.assertEqual(user.email, self.active_user)
 
     def test_find_one_active_not_found(self):
-        user = UserInterface.find_one_active('test@test.com')
+        user = UserInterface.find_one_active(self.inactive_user)
 
         self.assertIsNone(user)
 
     def test_find_one_inactive_successful(self):
-        user = UserInterface.find_one_inactive('test@test.com')
+        user = UserInterface.find_one_inactive(self.inactive_user)
 
         self.assertIsNotNone(user)
         self.assertIsInstance(user, User)
-        self.assertEqual(user.email, 'test@test.com')
+        self.assertEqual(user.email, self.inactive_user)
 
     def test_find_one_inactive_not_found(self):
-        user = UserInterface.find_one_inactive('test2@test.com')
+        user = UserInterface.find_one_inactive(self.active_user)
 
         self.assertIsNone(user)
