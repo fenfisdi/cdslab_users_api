@@ -15,7 +15,7 @@ from src.utils.encoder import BsonObject
 from src.utils.messages import UserMessage, CredentialMessage, QuestionMessage
 from src.utils.response import UJSONResponse
 
-credential_routes = APIRouter()
+credential_routes = APIRouter(tags=['Credentials'])
 
 
 @credential_routes.post('/user/credentials')

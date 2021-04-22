@@ -12,7 +12,7 @@ from src.utils.encoder import BsonObject
 from src.utils.messages import UserMessage
 from src.utils.response import UJSONResponse
 
-user_routes = APIRouter()
+user_routes = APIRouter(tags=['User'])
 
 
 @user_routes.post('/user')
