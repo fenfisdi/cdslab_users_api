@@ -19,7 +19,7 @@ user_routes = APIRouter()
 def create_user(user: NewUser):
     user_found = UserInterface.find_one(email=user.email)
     if user_found:
-        return UJSONResponse(UserMessage.exist, HTTP_404_NOT_FOUND)
+        return UJSONResponse(UserMessage.exist, HTTP_400_BAD_REQUEST)
 
     user_dict = user.dict(
         exclude={'password', 'otp_code', 'security_questions'}
@@ -52,7 +52,7 @@ def create_user(user: NewUser):
 def validate_user(email: str):
     user_found = UserInterface.find_one_inactive(email=email)
     if not user_found:
-        return UJSONResponse(UserMessage.not_found, HTTP_400_BAD_REQUEST)
+        return UJSONResponse(UserMessage.not_found, HTTP_404_NOT_FOUND)
     user_found.is_active = True
     user_found.save()
 
