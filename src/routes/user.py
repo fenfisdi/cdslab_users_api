@@ -23,7 +23,6 @@ def create_user(user: NewUser):
 
     \f
     :param user: User input
-    :return: UJSONResponse
     """
     user_found = UserInterface.find_one(email=user.email)
     if user_found:

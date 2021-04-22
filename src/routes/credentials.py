@@ -20,6 +20,13 @@ credential_routes = APIRouter(tags=['Credentials'])
 
 @credential_routes.post('/user/credentials')
 def validate_credentials(user: UserCredentials):
+    """
+    Validate if user credentials are valid, if didn't match, will return bad
+    request error.
+
+    \f
+    :param user: user credentials like email and password.
+    """
     user_found = UserInterface.find_one(user.email)
     if not user_found:
         return UJSONResponse(UserMessage.not_found, HTTP_404_NOT_FOUND)
@@ -36,6 +43,13 @@ def validate_credentials(user: UserCredentials):
 
 @credential_routes.get('/user/{email}/questions')
 def find_security_questions(email: str):
+    """
+    Find security questions from a specific user, if user did not exist, will
+    return user not found, else, could return questions from the user.
+
+    \f
+    :param email: email from the user to find questions.
+    """
     user_found = UserInterface.find_one_active(email)
     if not user_found:
         return UJSONResponse(UserMessage.not_found, HTTP_404_NOT_FOUND)
@@ -53,6 +67,14 @@ def find_security_questions(email: str):
 
 @credential_routes.post('/user/{email}/questions')
 def set_security_questions(email: str, questions: List[SecurityQuestion]):
+    """
+    Update security questions from specific user, all questions will be replaced
+    depends of the input questions.
+
+    \f
+    :param email: user email to update questions.
+    :param questions: array of questions.
+    """
     user_found = UserInterface.find_one_active(email)
     if not user_found:
         return UJSONResponse(UserMessage.not_found, HTTP_404_NOT_FOUND)
@@ -76,6 +98,13 @@ def set_security_questions(email: str, questions: List[SecurityQuestion]):
 
 @credential_routes.post('/user/password')
 def update_password(user: UserCredentials):
+    """
+    Update password from specific user, if user not found or is not valid, will
+    return not found.
+
+    \f
+    :param user: email from the user to update passwords.
+    """
     user_found = UserInterface.find_one_active(user.email)
     if not user_found:
         return UJSONResponse(UserMessage.not_found, HTTP_404_NOT_FOUND)
@@ -94,6 +123,13 @@ def update_password(user: UserCredentials):
 
 @credential_routes.post('/user/{email}/security_code')
 def set_security_code(email: str, code: str):
+    """
+    Update security code to specific user at its credentials.
+
+    \f
+    :param email: email from the user to set security code.
+    :param code: code to update in its credentials
+    """
     user_found = UserInterface.find_one_active(email)
     if not user_found:
         return UJSONResponse(UserMessage.not_found, HTTP_404_NOT_FOUND)
@@ -112,6 +148,13 @@ def set_security_code(email: str, code: str):
 
 @credential_routes.get('/user/{email}/security_code')
 def get_security_code(email: str):
+    """
+    Find security code from the user credentials, if user or credentials did not
+    exist, will return not found
+
+    \f
+    :param email: email from the user to find security code.
+    """
     user_found = UserInterface.find_one_active(email)
     if not user_found:
         return UJSONResponse(UserMessage.not_found, HTTP_404_NOT_FOUND)
@@ -124,3 +167,23 @@ def get_security_code(email: str):
         'security_code': credentials.security_code,
     }
     return UJSONResponse(CredentialMessage.code_found, HTTP_200_OK, data)
+
+
+@credential_routes.get('/user/{email}/otp')
+def get_otp_code(email: str):
+    """
+    Find otp code from user credentials and return its information.
+
+    \f
+    :param email: user email to find otp code.
+    """
+    user_found = UserInterface.find_one(email)
+    if not user_found:
+        return UJSONResponse(UserMessage.not_found, HTTP_404_NOT_FOUND)
+
+    credential = CredentialInterface.find_one(user_found)
+    if not user_found:
+        return UJSONResponse(UserMessage.not_found, HTTP_404_NOT_FOUND)
+
+    data = {'otp_code': credential.otp_code}
+    return UJSONResponse(UserMessage.found, HTTP_200_OK, data)
