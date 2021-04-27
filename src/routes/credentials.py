@@ -37,7 +37,11 @@ def validate_credentials(user: UserCredentials):
 
     if credentials.password != user.password:
         return UJSONResponse(CredentialMessage.invalid, HTTP_400_BAD_REQUEST)
-    data = {'otp_code': credentials.otp_code}
+    data = {
+        'email': user.email,
+        'name': user_found.name,
+        'role': user_found.role
+    }
     return UJSONResponse(CredentialMessage.logged, HTTP_200_OK, data)
 
 

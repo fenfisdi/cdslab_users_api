@@ -23,7 +23,7 @@ services:
     ports:
       - 27017:27017
     volumes:
-      - /tmp/data:/data/db
+      - /tmp/data/cdslab_user/:/data/db
 
 
 networks:
