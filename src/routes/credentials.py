@@ -27,7 +27,7 @@ def validate_credentials(user: UserCredentials):
     \f
     :param user: user credentials like email and password.
     """
-    user_found = UserInterface.find_one(user.email)
+    user_found = UserInterface.find_one_active(user.email)
     if not user_found:
         return UJSONResponse(UserMessage.not_found, HTTP_404_NOT_FOUND)
 
