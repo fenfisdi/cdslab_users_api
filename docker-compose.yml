@@ -4,9 +4,9 @@ services:
     build: .
     container_name: cdslab_user_app
     env_file: .env
-    image: cdslab_user
+    image: fenfisdi/cdslab_user:dev
     networks:
-      - cdslab_user
+      - cdslab_user_network
     ports:
       - 5000:5000
     volumes:
