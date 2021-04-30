@@ -18,3 +18,12 @@ class UserInterface:
             is_deleted=False
         )
         return User.objects(**filters).first()
+
+    @classmethod
+    def find_all(cls, is_enabled: bool = True, is_valid: bool = True):
+        filters = dict(
+            is_enabled=is_enabled,
+            is_valid=is_valid,
+            is_deleted=False
+        )
+        return User.objects(**filters).all()

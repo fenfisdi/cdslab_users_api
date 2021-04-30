@@ -10,6 +10,8 @@ class UserMessage:
     validated: str = 'User has been validated'
     updated: str = 'User updated'
     deleted: str = 'User deleted'
+    disabled: str = 'User disabled'
+    enabled: str = 'User enabled'
 
 
 @dataclass
