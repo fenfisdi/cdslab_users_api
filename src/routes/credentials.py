@@ -27,7 +27,7 @@ def validate_credentials(user: UserCredentials):
     \f
     :param user: user credentials like email and password.
     """
-    user_found = UserInterface.find_one_active(user.email)
+    user_found = UserInterface.find_one(user.email, is_active=False)
     if not user_found:
         return UJSONResponse(UserMessage.not_found, HTTP_404_NOT_FOUND)
 
@@ -54,7 +54,7 @@ def find_security_questions(email: str):
     \f
     :param email: email from the user to find questions.
     """
-    user_found = UserInterface.find_one_active(email)
+    user_found = UserInterface.find_one(email)
     if not user_found:
         return UJSONResponse(UserMessage.not_found, HTTP_404_NOT_FOUND)
 
@@ -79,7 +79,7 @@ def set_security_questions(email: str, questions: List[SecurityQuestion]):
     :param email: user email to update questions.
     :param questions: array of questions.
     """
-    user_found = UserInterface.find_one_active(email)
+    user_found = UserInterface.find_one(email)
     if not user_found:
         return UJSONResponse(UserMessage.not_found, HTTP_404_NOT_FOUND)
 
@@ -109,7 +109,7 @@ def update_password(user: UserCredentials):
     \f
     :param user: email from the user to update passwords.
     """
-    user_found = UserInterface.find_one_active(user.email)
+    user_found = UserInterface.find_one(user.email)
     if not user_found:
         return UJSONResponse(UserMessage.not_found, HTTP_404_NOT_FOUND)
 
@@ -134,7 +134,7 @@ def set_security_code(email: str, code: str):
     :param email: email from the user to set security code.
     :param code: code to update in its credentials
     """
-    user_found = UserInterface.find_one_active(email)
+    user_found = UserInterface.find_one(email)
     if not user_found:
         return UJSONResponse(UserMessage.not_found, HTTP_404_NOT_FOUND)
 
@@ -159,7 +159,7 @@ def get_security_code(email: str):
     \f
     :param email: email from the user to find security code.
     """
-    user_found = UserInterface.find_one_active(email)
+    user_found = UserInterface.find_one(email)
     if not user_found:
         return UJSONResponse(UserMessage.not_found, HTTP_404_NOT_FOUND)
 

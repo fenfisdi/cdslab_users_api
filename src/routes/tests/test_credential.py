@@ -108,7 +108,7 @@ class FindSecurityQuestionsRouteTestCase(TestCase):
             self,
             user_interface: Mock
     ):
-        user_interface.find_one_active.return_value = None
+        user_interface.find_one.return_value = None
 
         response = self.client.get(self.route)
 
@@ -160,7 +160,7 @@ class SetSecurityQuestionsRouteTestCase(TestCase):
             self,
             user_interface: Mock
     ):
-        user_interface.find_one_active.return_value = None
+        user_interface.find_one.return_value = None
 
         response = self.client.post(self.route, json=self.valid_data)
 
@@ -212,7 +212,7 @@ class UpdatePasswordRouteTestCase(TestCase):
             self,
             user_interface: Mock
     ):
-        user_interface.find_one_active.return_value = None
+        user_interface.find_one.return_value = None
 
         response = self.client.post(self.route, json=self.valid_data)
 
@@ -226,7 +226,7 @@ class UpdatePasswordRouteTestCase(TestCase):
             user_interface: Mock,
             credential_interface: Mock,
     ):
-        user_interface.find_one_active.return_value = Mock()
+        user_interface.find_one.return_value = Mock()
         credential_interface.find_one.return_value = None
 
         response = self.client.post(self.route, json=self.valid_data)
@@ -251,7 +251,7 @@ class SetSecurityCodeRouteTestCase(TestCase):
             user_interface: Mock,
             question_interface: Mock,
     ):
-        user_interface.find_one_active.return_value = Mock()
+        user_interface.find_one.return_value = Mock()
         question_interface.find_one.return_value = Mock(security_code='1234')
 
         response = self.client.post(self.route, params=self.params)
@@ -264,7 +264,7 @@ class SetSecurityCodeRouteTestCase(TestCase):
             self,
             user_interface: Mock
     ):
-        user_interface.find_one_active.return_value = None
+        user_interface.find_one.return_value = None
 
         response = self.client.post(self.route, params=self.params)
 
@@ -278,7 +278,7 @@ class SetSecurityCodeRouteTestCase(TestCase):
             user_interface: Mock,
             question_interface: Mock,
     ):
-        user_interface.find_one_active.return_value = Mock()
+        user_interface.find_one.return_value = Mock()
         question_interface.find_one.return_value = None
 
         response = self.client.post(self.route, params=self.params)
@@ -303,7 +303,7 @@ class GetSecurityCodeRouteTestCase(TestCase):
             user_interface: Mock,
             question_interface: Mock,
     ):
-        user_interface.find_one_active.return_value = Mock()
+        user_interface.find_one.return_value = Mock()
         question_interface.find_one.return_value = Mock(security_code='1234')
 
         response = self.client.get(self.route, params=self.params)
@@ -316,7 +316,7 @@ class GetSecurityCodeRouteTestCase(TestCase):
             self,
             user_interface: Mock,
     ):
-        user_interface.find_one_active.return_value = None
+        user_interface.find_one.return_value = None
 
         response = self.client.get(
             self.route,
@@ -333,7 +333,7 @@ class GetSecurityCodeRouteTestCase(TestCase):
             user_interface: Mock,
             question_interface: Mock,
     ):
-        user_interface.find_one_active.return_value = Mock()
+        user_interface.find_one.return_value = Mock()
         question_interface.find_one.return_value = None
 
         response = self.client.get(self.route, params=self.params)

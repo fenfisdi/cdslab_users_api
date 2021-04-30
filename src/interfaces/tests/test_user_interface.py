@@ -22,18 +22,18 @@ class UserInterfaceTestCase(TestCase):
         User(
             name='testName',
             email=self.active_user,
-            is_active=True
+            is_valid=True
         ).save()
 
     def tearDown(self):
         disconnect()
 
     def test_find_one_successful(self):
-        user = UserInterface.find_one(self.inactive_user)
+        user = UserInterface.find_one(self.active_user)
 
         self.assertIsNotNone(user)
         self.assertIsInstance(user, User)
-        self.assertEqual(user.email, self.inactive_user)
+        self.assertEqual(user.email, self.active_user)
 
     def test_find_one_not_found(self):
         user = UserInterface.find_one('test1@test.com')
@@ -41,25 +41,25 @@ class UserInterfaceTestCase(TestCase):
         self.assertIsNone(user)
 
     def test_find_one_active_successful(self):
-        user = UserInterface.find_one_active(self.active_user)
+        user = UserInterface.find_one(self.active_user)
 
         self.assertIsNotNone(user)
         self.assertIsInstance(user, User)
         self.assertEqual(user.email, self.active_user)
 
     def test_find_one_active_not_found(self):
-        user = UserInterface.find_one_active(self.inactive_user)
+        user = UserInterface.find_one(self.inactive_user)
 
         self.assertIsNone(user)
 
     def test_find_one_inactive_successful(self):
-        user = UserInterface.find_one_inactive(self.inactive_user)
+        user = UserInterface.find_one(self.inactive_user, is_valid=False)
 
         self.assertIsNotNone(user)
         self.assertIsInstance(user, User)
         self.assertEqual(user.email, self.inactive_user)
 
     def test_find_one_inactive_not_found(self):
-        user = UserInterface.find_one_inactive(self.active_user)
+        user = UserInterface.find_one(self.active_user, is_valid=False)
 
         self.assertIsNone(user)

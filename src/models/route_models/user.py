@@ -4,6 +4,8 @@ from typing import List
 
 from pydantic import BaseModel, Field, validator, EmailStr
 
+from src.models.general.user_constants import UserRoles
+
 ALPHANUMERIC = r'^[a-zA-ZñÑ\s]+$'
 PHONE_PREFIX = r'^\+[\d]{1,3}$'
 FORMAT_DATE = r'^\d{4}-\d{2}-\d{2}$'
@@ -59,6 +61,7 @@ class NewUser(UpdateUser):
     institution_role: str = Field(...)
     birthday: datetime = Field(...)
     email: EmailStr = Field(...)
+    role: UserRoles = Field(None)
     password: str = Field(...)
     otp_code: str = Field(...)
     security_questions: List[SecurityQuestion] = Field(None)

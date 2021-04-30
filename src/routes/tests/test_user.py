@@ -102,7 +102,7 @@ class FindUserRouteTestCase(TestCase):
 
     @patch(solve_path('UserInterface'))
     def test_find_user_successful(self, user_interface: Mock):
-        user_interface.find_one_active.return_value = Mock(
+        user_interface.find_one.return_value = Mock(
             to_mongo=Mock(return_value={})
         )
 
@@ -113,7 +113,7 @@ class FindUserRouteTestCase(TestCase):
 
     @patch(solve_path('UserInterface'))
     def test_find_user_invalid_successful(self, user_interface: Mock):
-        user_interface.find_one_inactive.return_value = Mock(
+        user_interface.find_one.return_value = Mock(
             to_mongo=Mock(return_value={})
         )
         params = dict(invalid=True)
@@ -124,7 +124,7 @@ class FindUserRouteTestCase(TestCase):
 
     @patch(solve_path('UserInterface'))
     def test_find_user_not_found(self, user_interface: Mock):
-        user_interface.find_one_active.return_value = None
+        user_interface.find_one.return_value = None
 
         response = self.client.get(self.route)
 

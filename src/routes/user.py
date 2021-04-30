@@ -67,26 +67,23 @@ def validate_user(email: str):
     user_found = UserInterface.find_one_inactive(email=email)
     if not user_found:
         return UJSONResponse(UserMessage.not_found, HTTP_404_NOT_FOUND)
-    user_found.is_active = True
+    user_found.is_valid = True
     user_found.save()
 
     return UJSONResponse(UserMessage.validated, HTTP_200_OK)
 
 
 @user_routes.get('/user/{email}')
-def find_user(email: str, invalid: bool = False):
+def find_user(email: str, is_valid: bool = True):
     """
     Find user in database, depends of invalid param, could be a valid or invalid
     user, if user did not exist, will return user not found.
 
     \f
     :param email: email from the user to find.
-    :param invalid: if valid state user is valid or invalid.
+    :param is_valid: if valid state user is valid or invalid.
     """
-    if invalid:
-        user = UserInterface.find_one_inactive(email)
-    else:
-        user = UserInterface.find_one_active(email)
+    user = UserInterface.find_one(email, is_valid=is_valid)
     if not user:
         return UJSONResponse(UserMessage.not_found, HTTP_404_NOT_FOUND)
 
