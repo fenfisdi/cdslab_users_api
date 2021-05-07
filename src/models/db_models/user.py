@@ -26,6 +26,8 @@ class User(BaseDocument):
     is_deleted = BooleanField(default=False)
     is_valid = BooleanField(default=False)
     is_enabled = BooleanField(default=True)
+    notify_removal = BooleanField(default=True)
+    notify_simulation_done = BooleanField(default=True)
 
 
 class Question(EmbeddedDocument):
