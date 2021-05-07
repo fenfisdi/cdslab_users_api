@@ -1,4 +1,4 @@
-from typing import Union
+from typing import Optional
 
 from src.models import User
 
@@ -6,26 +6,24 @@ from src.models import User
 class UserInterface:
 
     @staticmethod
-    def find_one(email: str) -> Union[None, User]:
+    def find_one(
+        email: str,
+        is_enabled: bool = True,
+        is_valid: bool = True
+    ) -> Optional[User]:
         filters = dict(
             email=email,
+            is_enabled=is_enabled,
+            is_valid=is_valid,
+            is_deleted=False
         )
         return User.objects(**filters).first()
 
-    @staticmethod
-    def find_one_active(email: str) -> Union[None, User]:
+    @classmethod
+    def find_all(cls, is_enabled: bool = True, is_valid: bool = True):
         filters = dict(
-            email=email,
-            is_active=True,
-            is_deleted=False,
+            is_enabled=is_enabled,
+            is_valid=is_valid,
+            is_deleted=False
         )
-        return User.objects(**filters).first()
-
-    @staticmethod
-    def find_one_inactive(email: str) -> Union[None, User]:
-        filters = dict(
-            email=email,
-            is_active=False,
-            is_deleted=False,
-        )
-        return User.objects(**filters).first()
+        return User.objects(**filters).all()

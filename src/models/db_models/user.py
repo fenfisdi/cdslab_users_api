@@ -22,9 +22,10 @@ class User(BaseDocument):
     profession = StringField()
     gender = StringField()
     birthday = DateField()
-    role = StringField(default="user", choices=['user', 'admin', 'root'])
+    role = StringField(default="user")
     is_deleted = BooleanField(default=False)
-    is_active = BooleanField(default=False)
+    is_valid = BooleanField(default=False)
+    is_enabled = BooleanField(default=True)
 
 
 class Question(EmbeddedDocument):

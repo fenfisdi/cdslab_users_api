@@ -76,7 +76,7 @@ class ValidateUserRouteTestCase(TestCase):
 
     @patch(solve_path('UserInterface'))
     def test_validate_user_successful(self, user_interface: Mock):
-        user_interface.find_one_inactive.return_value = Mock()
+        user_interface.find_one.return_value = Mock()
 
         response = self.client.get(self.route)
 
@@ -85,7 +85,7 @@ class ValidateUserRouteTestCase(TestCase):
 
     @patch(solve_path('UserInterface'))
     def test_validate_user_not_found(self, user_interface: Mock):
-        user_interface.find_one_inactive.return_value = None
+        user_interface.find_one.return_value = None
 
         response = self.client.get(self.route)
 
@@ -102,7 +102,7 @@ class FindUserRouteTestCase(TestCase):
 
     @patch(solve_path('UserInterface'))
     def test_find_user_successful(self, user_interface: Mock):
-        user_interface.find_one_active.return_value = Mock(
+        user_interface.find_one.return_value = Mock(
             to_mongo=Mock(return_value={})
         )
 
@@ -113,7 +113,7 @@ class FindUserRouteTestCase(TestCase):
 
     @patch(solve_path('UserInterface'))
     def test_find_user_invalid_successful(self, user_interface: Mock):
-        user_interface.find_one_inactive.return_value = Mock(
+        user_interface.find_one.return_value = Mock(
             to_mongo=Mock(return_value={})
         )
         params = dict(invalid=True)
@@ -124,7 +124,7 @@ class FindUserRouteTestCase(TestCase):
 
     @patch(solve_path('UserInterface'))
     def test_find_user_not_found(self, user_interface: Mock):
-        user_interface.find_one_active.return_value = None
+        user_interface.find_one.return_value = None
 
         response = self.client.get(self.route)
 
@@ -145,7 +145,7 @@ class UpdateUserRouteTestCase(TestCase):
 
     @patch(solve_path('UserInterface'))
     def test_update_user_successful(self, user_interface: Mock):
-        user_interface.find_one_active.return_value = Mock(
+        user_interface.find_one.return_value = Mock(
             to_mongo=Mock(return_value={})
         )
 
@@ -156,7 +156,7 @@ class UpdateUserRouteTestCase(TestCase):
 
     @patch(solve_path('UserInterface'))
     def test_update_user_not_found(self, user_interface: Mock):
-        user_interface.find_one_active.return_value = None
+        user_interface.find_one.return_value = None
 
         response = self.client.put(self.route, json=self.valid_data)
 
@@ -173,7 +173,7 @@ class DeleteUserRouteTestCase(TestCase):
 
     @patch(solve_path('UserInterface'))
     def test_delete_user_successful(self, user_interface: Mock):
-        user_interface.find_one_active.return_value = Mock()
+        user_interface.find_one.return_value = Mock()
 
         response = self.client.delete(self.route)
 
@@ -182,7 +182,7 @@ class DeleteUserRouteTestCase(TestCase):
 
     @patch(solve_path('UserInterface'))
     def test_delete_user_not_found(self, user_interface: Mock):
-        user_interface.find_one_active.return_value = None
+        user_interface.find_one.return_value = None
 
         response = self.client.delete(self.route)
 
