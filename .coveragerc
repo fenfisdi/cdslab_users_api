@@ -6,7 +6,8 @@ omit=
     venv/*
     .venv/*
     instance/*
-    main.py
+    src/api.py
+    src/config.py
     config.py
     setup.py
 
