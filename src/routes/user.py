@@ -93,7 +93,8 @@ def find_user(email: str, is_valid: bool = True):
 
 
 @user_routes.get('/user')
-def list_users(is_valid: bool = True, name: str = "", email: str = "", role:UserRoles = None ):
+def list_users(is_valid: bool = True, name: str = "", 
+        email: str = "", role: UserRoles = None ):
     """
     return a list of users that satisfy the search parameters. 
 
