@@ -74,7 +74,7 @@ def validate_user(email: str):
 
 
 @user_routes.get('/user/{email}')
-def find_user(email: str, is_valid: bool = True):
+def find_user(email: str, is_valid: bool = True, is_enabled: bool = True):
     """
     Find user in database, depends of invalid param, could be a valid or invalid
     user, if user did not exist, will return user not found.
@@ -82,8 +82,13 @@ def find_user(email: str, is_valid: bool = True):
     \f
     :param email: email from the user to find.
     :param is_valid: if valid state user is valid or invalid.
+    :param is_enabled:
     """
-    user = UserInterface.find_one(email, is_valid=is_valid)
+    user = UserInterface.find_one(
+        email,
+        is_valid=is_valid,
+        is_enabled=is_enabled
+    )
     if not user:
         return UJSONResponse(UserMessage.not_found, HTTP_404_NOT_FOUND)
 
