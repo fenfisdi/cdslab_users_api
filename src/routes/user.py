@@ -105,7 +105,8 @@ def list_users(is_valid: bool = True, name: str = "",
     :param role: Role for the search
     """
     
-    users = UserInterface.find_all(is_valid = is_valid, name = name, email = email, role = "" if role is None else role.value)
+    users = UserInterface.find_all(is_valid = is_valid, name = name, 
+            email = email, role = "" if role is None else role.value)
     if not users:
         return UJSONResponse(UserMessage.found, HTTP_200_OK, BsonObject.dict(users))
 

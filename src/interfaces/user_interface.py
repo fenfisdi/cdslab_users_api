@@ -1,7 +1,6 @@
 from typing import Optional
 from src.models import User
 
-
 class UserInterface:
 
     @staticmethod
@@ -24,8 +23,8 @@ class UserInterface:
             is_enabled=is_enabled,
             is_valid=is_valid,
             is_deleted=False,
-            name__startswith = name,
-            email__startswith = email,
-            role__contains = role
+            name__startswith=name,
+            email__startswith=email,
+            role__contains=role
         )
         return User.objects(**filters).all()
