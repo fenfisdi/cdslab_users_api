@@ -18,7 +18,8 @@ class UserInterface:
         return User.objects(**filters).first()
 
     @classmethod
-    def find_all(cls, is_enabled: bool = True, is_valid: bool = True, name: str = "", email: str = "", role: str = ""):
+    def find_all(cls, is_enabled: bool = True, is_valid: bool = True, 
+            name: str = "", email: str = "", role: str = ""):
         filters = dict(
             is_enabled=is_enabled,
             is_valid=is_valid,

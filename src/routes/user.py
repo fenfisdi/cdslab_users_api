@@ -94,7 +94,7 @@ def find_user(email: str, is_valid: bool = True):
 
 @user_routes.get('/user')
 def list_users(is_valid: bool = True, name: str = "", 
-        email: str = "", role: UserRoles = None ):
+        email: str = "", role: UserRoles = None):
     """
     return a list of users that satisfy the search parameters. 
 
@@ -105,8 +105,8 @@ def list_users(is_valid: bool = True, name: str = "",
     :param role: Role for the search
     """
     
-    users = UserInterface.find_all(is_valid = is_valid, name = name, 
-            email = email, role = "" if role is None else role.value)
+    users = UserInterface.find_all(is_valid=is_valid, name=name, 
+            email=email, role="" if role is None else role.value)
     if not users:
         return UJSONResponse(UserMessage.found, HTTP_200_OK, BsonObject.dict(users))
 
