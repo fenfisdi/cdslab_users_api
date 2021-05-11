@@ -174,14 +174,15 @@ def get_security_code(email: str):
 
 
 @credential_routes.get('/user/{email}/otp')
-def get_otp_code(email: str):
+def get_otp_code(email: str, is_valid: bool = True):
     """
     Find otp code from user credentials and return its information.
 
     \f
+    :param is_valid:
     :param email: user email to find otp code.
     """
-    user_found = UserInterface.find_one(email)
+    user_found = UserInterface.find_one(email, is_valid=is_valid)
     if not user_found:
         return UJSONResponse(UserMessage.not_found, HTTP_404_NOT_FOUND)
 
