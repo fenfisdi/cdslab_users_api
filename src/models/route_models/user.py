@@ -1,3 +1,4 @@
+from dataclasses import field
 import re
 from datetime import datetime
 from typing import List
@@ -26,6 +27,9 @@ class UpdateUser(BaseModel):
     profession: str = Field(None)
     gender: str = Field(None)
     birthday: datetime = Field(None)
+    role: UserRoles = Field(None)
+    notify_removal: bool = Field(...)
+    notify_simulation_done: bool = Field(...)
 
     class Config:
         fields = {
