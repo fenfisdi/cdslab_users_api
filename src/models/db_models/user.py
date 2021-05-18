@@ -1,6 +1,13 @@
-from mongoengine import (BooleanField, DateField, EmbeddedDocument,
-                         EmbeddedDocumentListField, EnumField, IntField,
-                         ReferenceField, StringField)
+from mongoengine import (
+    BooleanField,
+    DateField,
+    EmbeddedDocument,
+    EmbeddedDocumentListField,
+    EnumField,
+    IntField,
+    ReferenceField,
+    StringField
+)
 
 from .base import BaseDocument
 from ..general.user_constants import UserRoles
