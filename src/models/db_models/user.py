@@ -1,16 +1,14 @@
 from mongoengine import (
-    BooleanField,
-    DateField,
-    EmbeddedDocument,
-    EmbeddedDocumentListField,
-    EnumField,
+    StringField,
     IntField,
+    DateField,
     ReferenceField,
-    StringField
+    BooleanField,
+    EmbeddedDocument,
+    EmbeddedDocumentListField
 )
 
 from .base import BaseDocument
-from ..general.user_constants import UserRoles
 
 
 class User(BaseDocument):
@@ -24,7 +22,7 @@ class User(BaseDocument):
     profession = StringField()
     gender = StringField()
     birthday = DateField()
-    role = EnumField(UserRoles)
+    role = StringField(default="user")
     is_deleted = BooleanField(default=False)
     is_valid = BooleanField(default=False)
     is_enabled = BooleanField(default=True)

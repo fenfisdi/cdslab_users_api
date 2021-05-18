@@ -1,8 +1,9 @@
+from dataclasses import field
 import re
 from datetime import datetime
 from typing import List
 
-from pydantic import BaseModel, EmailStr, Field, validator
+from pydantic import BaseModel, Field, validator, EmailStr
 
 from src.models.general.user_constants import UserRoles
 
@@ -27,8 +28,8 @@ class UpdateUser(BaseModel):
     gender: str = Field(None)
     birthday: datetime = Field(None)
     role: UserRoles = Field(None)
-    notify_removal: bool = Field(None)
-    notify_simulation_done: bool = Field(None)
+    notify_removal: bool = Field(...)
+    notify_simulation_done: bool = Field(...)
 
     class Config:
         fields = {
@@ -64,9 +65,7 @@ class NewUser(UpdateUser):
     institution_role: str = Field(...)
     birthday: datetime = Field(...)
     email: EmailStr = Field(...)
-    role: UserRoles = Field(UserRoles.USER)
-    notify_removal: bool = Field(True)
-    notify_simulation_done: bool = Field(True)
+    role: UserRoles = Field(None)
     password: str = Field(...)
     otp_code: str = Field(...)
     security_questions: List[SecurityQuestion] = Field(None)

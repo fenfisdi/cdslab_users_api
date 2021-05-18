@@ -7,12 +7,12 @@ from starlette.status import (
     HTTP_404_NOT_FOUND
 )
 
-from src.interfaces import CredentialInterface, QuestionInterface, UserInterface
+from src.interfaces import UserInterface, CredentialInterface, QuestionInterface
 from src.models import UserCredentials
 from src.models.db_models.user import Question
 from src.models.route_models.user import SecurityQuestion
 from src.utils.encoder import BsonObject
-from src.utils.messages import CredentialMessage, QuestionMessage, UserMessage
+from src.utils.messages import UserMessage, CredentialMessage, QuestionMessage
 from src.utils.response import UJSONResponse
 
 credential_routes = APIRouter(tags=['Credentials'])
@@ -37,12 +37,10 @@ def validate_credentials(user: UserCredentials):
 
     if credentials.password != user.password:
         return UJSONResponse(CredentialMessage.invalid, HTTP_400_BAD_REQUEST)
-
-    # TODO: Verify User Role
     data = {
         'email': user.email,
         'name': user_found.name,
-        'role': user_found.role.value
+        'role': user_found.role
     }
     return UJSONResponse(CredentialMessage.logged, HTTP_200_OK, data)
 

@@ -1,5 +1,3 @@
-from typing import Optional
-
 from fastapi import APIRouter
 from starlette.status import (
     HTTP_200_OK,
@@ -9,11 +7,11 @@ from starlette.status import (
 )
 
 from src.interfaces import UserInterface
-from src.models import Credentials, NewUser, SecurityQuestions, UpdateUser, User
-from src.models.general.user_constants import UserRoles
+from src.models import User, Credentials, NewUser, UpdateUser, SecurityQuestions
 from src.utils.encoder import BsonObject
 from src.utils.messages import UserMessage
 from src.utils.response import UJSONResponse
+from src.models.general.user_constants import UserRoles
 
 user_routes = APIRouter(tags=['User'])
 
@@ -27,11 +25,6 @@ def create_user(user: NewUser):
     \f
     :param user: User input
     """
-
-    user_found = UserInterface.find_one(email=user.email, is_valid=False)
-    if user_found:
-        return UJSONResponse(UserMessage.exist, HTTP_400_BAD_REQUEST)
-
     user_found = UserInterface.find_one(email=user.email)
     if user_found:
         return UJSONResponse(UserMessage.exist, HTTP_400_BAD_REQUEST)
@@ -40,6 +33,7 @@ def create_user(user: NewUser):
         exclude={'password', 'otp_code', 'security_questions'}
     )
     new_user = User(**user_dict)
+    new_user.role = user.role.value
     credential = Credentials(
         user=new_user,
         password=user.password,
@@ -104,27 +98,22 @@ def find_user(email: str, is_valid: bool = True, is_enabled: bool = True):
 
 
 @user_routes.get('/user')
-def list_users(
-    is_valid: bool = True,
-    name: Optional[str] = None,
-    role: UserRoles = UserRoles.USER
-):
+def list_users(is_valid: bool = True, name: str = "", 
+        email: str = "", role: UserRoles = None):
     """
     return a list of users that satisfy the search parameters. 
 
     \f
     :param is_valid: Field that verifies that the user is valid.
     :param name: Name for the search
+    :param email: Email for the search
     :param role: Role for the search
     """
-
-    users = UserInterface.find_all(is_valid=is_valid, name=name, role=role)
+    
+    users = UserInterface.find_all(is_valid=is_valid, name=name, 
+            email=email, role="" if role is None else role.value)
     if not users:
-        return UJSONResponse(
-            UserMessage.found,
-            HTTP_200_OK,
-            BsonObject.dict(users)
-        )
+        return UJSONResponse(UserMessage.found, HTTP_200_OK, BsonObject.dict(users))
 
     return UJSONResponse(UserMessage.found, HTTP_200_OK, BsonObject.dict(users))
 
@@ -142,7 +131,7 @@ def update_user(email: str, user: UpdateUser):
     user_found = UserInterface.find_one(email)
     if not user_found:
         return UJSONResponse(UserMessage.not_found, HTTP_404_NOT_FOUND)
-
+    
     user.role = user.role.value
     user_found.update(**user.dict(exclude_none=True))
     user_found.save().reload()
