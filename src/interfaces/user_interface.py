@@ -1,5 +1,10 @@
 from typing import Optional
+
+from mongoengine.queryset.visitor import Q
+
 from src.models import User
+from src.models.general.user_constants import UserRoles
+
 
 class UserInterface:
 
@@ -18,14 +23,32 @@ class UserInterface:
         return User.objects(**filters).first()
 
     @classmethod
-    def find_all(cls, is_enabled: bool = True, is_valid: bool = True, 
-            name: str = "", email: str = "", role: str = ""):
+    def find_all(
+        cls,
+        is_enabled: bool = True,
+        is_valid: bool = True,
+        name: Optional[str] = None,
+        role: UserRoles = UserRoles.USER
+    ):
         filters = dict(
             is_enabled=is_enabled,
             is_valid=is_valid,
             is_deleted=False,
-            name__startswith=name,
-            email__startswith=email,
-            role__contains=role
+            role=role,
         )
+        if name:
+            name_q = dict(
+                **filters,
+                name__icontains=name,
+            )
+            last_name_q = dict(
+                **filters,
+                last_name__icontains=name,
+            )
+            email_q = dict(
+                **filters,
+                email__icontains=name,
+            )
+            query = Q(**name_q) | Q(**last_name_q) | Q(**email_q)
+            return User.objects(query)
         return User.objects(**filters).all()
