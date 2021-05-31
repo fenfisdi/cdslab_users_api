@@ -24,7 +24,6 @@ class UpdateUser(BaseModel):
     institution: str = Field(None)
     institution_role: str = Field(None)
     profession: str = Field(None)
-    gender: str = Field(None)
     birthday: datetime = Field(None)
     role: UserRoles = Field(None)
     notify_removal: bool = Field(None)
@@ -38,15 +37,7 @@ class UpdateUser(BaseModel):
             'institution': {'max_length': 64, 'regex': ALPHANUMERIC},
             'institution_role': {'max_length': 64, 'regex': ALPHANUMERIC},
             'profession': {'max_length': 64, 'regex': ALPHANUMERIC},
-            'gender': {'max_length': 1}
         }
-
-    @validator('gender')
-    def validate_gender(cls, value: str):
-        genders = ['F', 'M']
-        if value.upper() in genders:
-            return value.upper()
-        raise ValueError('Invalid Type, gender must be F, M')
 
     @validator('birthday', pre=True)
     def validate_birthday(cls, value):
