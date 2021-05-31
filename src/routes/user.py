@@ -143,7 +143,6 @@ def update_user(email: str, user: UpdateUser):
     if not user_found:
         return UJSONResponse(UserMessage.not_found, HTTP_404_NOT_FOUND)
 
-    user.role = user.role.value
     user_found.update(**user.dict(exclude_none=True))
     user_found.save().reload()
 
