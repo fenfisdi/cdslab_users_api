@@ -6,7 +6,7 @@ from pydantic import BaseModel, EmailStr, Field, validator
 
 from src.models.general.user_constants import UserRoles
 
-ALPHANUMERIC = r'^[a-zA-ZñÑ\s]+$'
+ALPHANUMERIC = r'^[a-zA-ZÀ-ÿñÑ\s]+$'
 PHONE_PREFIX = r'^\+[\d]{1,3}$'
 FORMAT_DATE = r'^\d{4}-\d{2}-\d{2}$'
 
