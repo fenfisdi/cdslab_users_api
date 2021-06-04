@@ -174,8 +174,8 @@ def delete_user(email: str):
 @user_routes.post('/user/{email}/disable')
 def disable_user(email: str):
     """
-
-    :param email:
+    disable a user
+    :param email: user email
     """
     user_found = UserInterface.find_one(email)
     if not user_found:
@@ -189,8 +189,8 @@ def disable_user(email: str):
 @user_routes.post('/user/{email}/enable')
 def enable_user(email: str):
     """
-
-    :param email:
+    enable a user
+    :param email: user email
     """
     user_found = UserInterface.find_one(email, is_enabled=False)
     if not user_found:

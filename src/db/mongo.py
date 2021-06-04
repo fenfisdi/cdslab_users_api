@@ -6,7 +6,13 @@ from src.utils.patterns import Singleton
 
 
 class MongoEngine(metaclass=Singleton):
+    '''
+    This class controls access to the database
+    '''
     def __init__(self):
+        '''
+        Class constructor
+        '''
         self.mongo_uri = environ.get('MONGO_URI')
 
     def get_connection(self):

@@ -23,6 +23,7 @@ class CreateUserRouteTestCase(TestCase):
             institution_role='student',
             birthday='2001-03-20',
             email='test@test.com',
+            role='user',
             password='a1b2c3d4',
             otp_code='z9y8x7',
             security_questions=[]
@@ -39,7 +40,7 @@ class CreateUserRouteTestCase(TestCase):
             user: Mock,
             credential: Mock,
             questions: Mock
-    ):
+     ):
         user_interface.find_one.return_value = None
         user.return_value = Mock(
             save=Mock(return_value={}),
@@ -58,7 +59,7 @@ class CreateUserRouteTestCase(TestCase):
     def test_create_user_exist(
             self,
             user_interface: Mock,
-    ):
+     ):
         user_interface.find_one.return_value = Mock()
 
         response = self.client.post(self.route, json=self.valid_data)

@@ -7,13 +7,23 @@ from src.models.general.user_constants import UserRoles
 
 
 class UserInterface:
-
+    '''
+        Interface to consult Users in DB
+    '''
     @staticmethod
     def find_one(
         email: str,
         is_enabled: bool = True,
         is_valid: bool = True
     ) -> Optional[User]:
+        '''
+        search for a user
+
+        \f
+        :param email: user email
+        :param  is_enabled: user status
+        :param  is_valid: user valid
+        '''
         filters = dict(
             email=email,
             is_enabled=is_enabled,
@@ -30,6 +40,16 @@ class UserInterface:
         name: Optional[str] = None,
         role: UserRoles = UserRoles.USER
     ):
+        '''
+        find all matching users
+
+        \f
+        :param is_enabled: user status
+        :param is_valid: user valid
+        :param name: user name
+        :param role: user role
+            
+        '''
         filters = dict(
             is_enabled=is_enabled,
             is_valid=is_valid,

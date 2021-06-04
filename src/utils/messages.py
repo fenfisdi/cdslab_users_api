@@ -3,6 +3,9 @@ from dataclasses import dataclass
 
 @dataclass
 class UserMessage:
+    '''
+        Messages used in endpoint responses for users 
+    '''
     created: str = 'User has been created'
     exist: str = 'User exist'
     found: str = 'User Found'
@@ -16,6 +19,9 @@ class UserMessage:
 
 @dataclass
 class CredentialMessage:
+    '''
+        Messages used in endpoint responses for credential 
+    '''
     invalid: str = 'Invalid User or Password'
     logged: str = 'User Logged'
     pass_updated: str = 'Password updated'
@@ -25,6 +31,9 @@ class CredentialMessage:
 
 @dataclass
 class QuestionMessage:
+    '''
+        Messages used in endpoint responses for question
+    '''
     found: str = 'Questions found'
     not_found: str = 'Questions not found'
     updated: str = 'Questions updated'

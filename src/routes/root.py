@@ -15,6 +15,11 @@ root_routes = APIRouter(prefix='/root', tags=['Root'])
 
 @root_routes.post('/user')
 def create_root_user(email: str):
+    """
+    Create a user root
+    \f
+    :param email: user email
+    """
     user_found = UserInterface.find_one(email)
     if not user_found:
         return UJSONResponse(UserMessage.not_found, HTTP_404_NOT_FOUND)
