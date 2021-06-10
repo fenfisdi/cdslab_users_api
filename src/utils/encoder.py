@@ -20,18 +20,15 @@ class BsonEncoder(JSONEncoder):
 
 
 class BsonObject:
-    '''
+    """
         Transform a mongodb document into a dictionary
-    '''
+    """
     @classmethod
     def dict(cls, document: Union[Document, Document]):
-        '''
-            Creates a python dictionary based in a mongodb document
-        Parameters:
-            document (Document): Mongodb document to transform
-        Return:
-            dict: Dictionary with keys and values from mongodb document
-        '''
+        """
+        Creates a python dictionary based in a mongodb document
+        :param document: Mongodb document to transform
+        """
         if isinstance(document, QuerySet):
             document = [value.to_mongo() for value in document]
             raw = BsonEncoder().encode(document)
