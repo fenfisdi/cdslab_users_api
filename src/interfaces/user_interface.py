@@ -19,7 +19,6 @@ class UserInterface:
         '''
         search for a user
 
-        \f
         :param email: user email
         :param  is_enabled: user status
         :param  is_valid: user valid
@@ -43,7 +42,6 @@ class UserInterface:
         '''
         find all matching users
 
-        \f
         :param is_enabled: user status
         :param is_valid: user valid
         :param name: user name

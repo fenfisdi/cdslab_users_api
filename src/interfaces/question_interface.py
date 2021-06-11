@@ -16,7 +16,6 @@ class QuestionInterface:
         '''
         Find the credentials of a user
 
-        \f
         :param user: user information
         '''
         return SecurityQuestions.objects(**filters).first()

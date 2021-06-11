@@ -1,4 +1,3 @@
-from logging import setLoggerClass
 from unittest import TestCase
 from unittest.mock import patch, Mock
 

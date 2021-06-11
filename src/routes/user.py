@@ -112,7 +112,6 @@ def list_users(
     """
     return a list of users that satisfy the search parameters. 
 
-    \f
     :param is_valid: Field that verifies that the user is valid.
     :param name: Name for the search
     :param role: Role for the search
@@ -135,7 +134,6 @@ def update_user(email: str, user: UpdateUser):
     Update data user information, except email and credentials information, all
     null fields will be ignored.
 
-    \f
     :param email: email from the user to update.
     :param user: user data to update.
     """
@@ -159,7 +157,6 @@ def delete_user(email: str):
     Delete user data from database as logic field, if user has been deleted
     before, will return user not found or return user deleted successfully.
 
-    \f
     :param email: email from the user to delete.
     """
     user_found = UserInterface.find_one(email)
@@ -175,6 +172,7 @@ def delete_user(email: str):
 def disable_user(email: str):
     """
     disable a user
+
     :param email: user email
     """
     user_found = UserInterface.find_one(email)
@@ -190,6 +188,7 @@ def disable_user(email: str):
 def enable_user(email: str):
     """
     enable a user
+
     :param email: user email
     """
     user_found = UserInterface.find_one(email, is_enabled=False)

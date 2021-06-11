@@ -27,6 +27,7 @@ class BsonObject:
     def dict(cls, document: Union[Document, Document]):
         """
         Creates a python dictionary based in a mongodb document
+
         :param document: Mongodb document to transform
         """
         if isinstance(document, QuerySet):
@@ -47,7 +48,6 @@ class BsonObject:
         '''
         Remove sensitive data from the dictionary
         
-        \f
         :param data: Dictionary with data to filter
         '''
         invalid_keys = {

@@ -17,7 +17,7 @@ root_routes = APIRouter(prefix='/root', tags=['Root'])
 def create_root_user(email: str):
     """
     Create a user root
-    \f
+    
     :param email: user email
     """
     user_found = UserInterface.find_one(email)

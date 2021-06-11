@@ -14,7 +14,7 @@ class UJSONResponse(Response):
             data: Optional[Union[dict, List[dict]]] = None):
         '''
         Constructor of class
-        \f
+        
         :param message: Response of process.
         :param status_code: HTTP code.
         :param data: Data of process.
