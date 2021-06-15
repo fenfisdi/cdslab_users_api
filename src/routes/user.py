@@ -106,6 +106,7 @@ def find_user(email: str, is_valid: bool = True, is_enabled: bool = True):
 @user_routes.get('/user')
 def list_users(
     is_valid: bool = True,
+    is_enabled: bool = True,
     name: Optional[str] = None,
     role: UserRoles = UserRoles.USER
 ):
@@ -114,11 +115,17 @@ def list_users(
 
     \f
     :param is_valid: Field that verifies that the user is valid.
+    :param is_enabled: Field that verifies if user is enabled.
     :param name: Name for the search
     :param role: Role for the search
     """
 
-    users = UserInterface.find_all(is_valid=is_valid, name=name, role=role)
+    users = UserInterface.find_all(
+        is_enabled=is_enabled,
+        is_valid=is_valid,
+        name=name,
+        role=role
+    )
     if not users:
         return UJSONResponse(
             UserMessage.found,
